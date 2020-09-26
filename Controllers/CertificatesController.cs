@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using NsigVerificationAPI.Data;
 using NsigVerificationAPI.Dtos;
@@ -59,6 +60,68 @@ namespace NsigVerificationAPI.Controllers
 
             //return Ok(certificateReadDto);
             return CreatedAtRoute(nameof(GetCertificateById), new { Id = certificateReadDto.Id }, certificateReadDto);
+        }
+
+        //PUT api/commands/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateCertificate(int id, CertificateUpdateDto certificateUpdateDto)
+        {
+            var certificateModelFromRepo = _repository.GetCertificateById(id);
+            if (certificateModelFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(certificateUpdateDto, certificateModelFromRepo);
+
+            _repository.UpdateCertificate(certificateModelFromRepo);
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
+
+        //PATCH api/commands/{id}
+        [HttpPatch("{id}")]
+        public ActionResult PartialCommandUpdate(int id, JsonPatchDocument<CertificateUpdateDto> patchDocument)
+        {
+
+            // checks whether the respource exists
+            var certificateModelFromRepo = _repository.GetCertificateById(id);
+            if (certificateModelFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            //Creating a new certificateupsatedto with the content from the repo
+            var certificateToPatch = _mapper.Map<CertificateUpdateDto>(certificateModelFromRepo);
+            patchDocument.ApplyTo(certificateToPatch, ModelState);
+            if (TryValidateModel(certificateToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            //now updating the resource in the repo
+            _mapper.Map(certificateToPatch, certificateModelFromRepo);
+            _repository.UpdateCertificate(certificateModelFromRepo);
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
+
+        //DELETE api/commands/{id}
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCertificate(int id)
+        {
+            // checks whether the respource exists
+            var certificateModelFromRepo = _repository.GetCertificateById(id);
+            if (certificateModelFromRepo == null)
+            {
+                return NotFound();
+            }
+            _repository.DeleteCertificate(certificateModelFromRepo);
+            _repository.SaveChanges();
+
+            return NoContent();
         }
     }
 } 

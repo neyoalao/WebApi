@@ -10,6 +10,11 @@ namespace NsigVerificationAPI.Data
             throw new System.NotImplementedException();
         }
 
+        public void DeleteCertificate(Certificate cert)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public IEnumerable<Certificate> GetAllCertificates()
         {
             var certificates = new List<Certificate>
@@ -30,6 +35,11 @@ namespace NsigVerificationAPI.Data
         }
 
         public bool SaveChanges()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UpdateCertificate(Certificate cert)
         {
             throw new System.NotImplementedException();
         }

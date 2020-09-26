@@ -13,6 +13,10 @@ namespace NsigVerificationAPI.Data
         // returns the certicate of the provided id number
         Certificate GetCertificateById(int id);
 
-        void CreateCertificate(Certificate cert); 
+        void CreateCertificate(Certificate cert);
+
+        void UpdateCertificate(Certificate cert);
+
+        void DeleteCertificate(Certificate cert);
     }
 }

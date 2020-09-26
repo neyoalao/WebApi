@@ -23,6 +23,15 @@ namespace NsigVerificationAPI.Data
             _context.Certificates.Add(cert);
         }
 
+        public void DeleteCertificate(Certificate cert)
+        {
+            if (cert == null)
+            {
+                throw new ArgumentNullException(nameof(cert));
+            }
+            _context.Certificates.Remove(cert);
+        }
+
         public IEnumerable<Certificate> GetAllCertificates()
         {
             return _context.Certificates.ToList();
@@ -36,6 +45,11 @@ namespace NsigVerificationAPI.Data
         public bool SaveChanges()
         {
             return (_context.SaveChanges() >= 0);
+        }
+
+        public void UpdateCertificate(Certificate cert)
+        {
+            //nothing is done
         }
     }
 }

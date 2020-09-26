@@ -13,6 +13,10 @@ namespace NsigVerificationAPI.Profiles
 
 
             CreateMap<CertificateCreateDto, Certificate>();
+
+            CreateMap<CertificateUpdateDto, Certificate>();
+
+            CreateMap<Certificate, CertificateUpdateDto>();
         }
     }
 }

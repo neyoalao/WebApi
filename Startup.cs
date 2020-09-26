@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NsigVerificationAPI.Data;
+using Newtonsoft.Json.Serialization;
 
 namespace NsigVerificationAPI
 {
@@ -31,7 +32,9 @@ namespace NsigVerificationAPI
             services.AddDbContext<NsigVerificationAPIContext>(opt => opt.UseMySql
             (Configuration.GetConnectionString("CertificateConnection")));
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(s => {
+                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
             //services.AddScoped<INsigVerificationAPIRepo, MockNsigVerificationAPIRepo>();
             services.AddScoped<INsigVerificationAPIRepo, SqlNsigVerificationAPIRepo>();
